@@ -8,7 +8,7 @@ import openai
 from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI
 
-openai.api_key = "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"
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 # LLM
 llm = ChatOpenAI()
