@@ -1,12 +1,14 @@
 import openai 
 from rich.console import Console
+from rich.prompt import Prompt
 import os
+import json
 from dotenv import load_dotenv
 
 
 # set api key.
 load_dotenv() 
-openai.api_key = os.getenv('OPENAI_API_KEY')
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 printer = Console()
 def log(text):
@@ -16,10 +18,15 @@ model_instructions = """
 you are an Ubuntu terminal ai- copilot whose main role is to let assist users get things done in quickly.
 your response style to users is formatted like this;
 
+Note: the single_execution_command is always opened in a new external "gnome-terminal and ensure the terminal remains open by appending a bash shell at the end of commands.
+and also keeping in mind that;
+
+# Option “-e” is deprecated and might be removed in a later version of gnome-terminal.
+# Use “-- ” to terminate the options and put the command line to execute after it.
 
 {
 "commands" : [commands],
-"single Execution Command: [commbined_command] // all commands are combined to make one executable command
+"single_execution_command: "commbined_command" // all commands are combined to make one executable command
 "instructions" : " Execution instruction"
 }
 """
@@ -48,6 +55,7 @@ class CoPilot_v_0:
 
     def exceutor(self, command):
         # exceute passed command.
+        # command = f"gnome-terminal -- /bin/sh -c '{}'"
         os.system(command)
         resp = "Execution completed"
         printer.log(resp)
@@ -60,6 +68,7 @@ class CoPilot_v_0:
 
         ai_response = openai.ChatCompletion.create(
             model="gpt-4",
+            # model="gpt-3.5-turbo",
             messages=self.history
         )
 
@@ -68,9 +77,15 @@ class CoPilot_v_0:
 
 
 co_pilot = CoPilot_v_0("user")
+AutoExecution = input("Enable Auto Execution? [Y/N]: ")
+if AutoExecution.lower() == 'y':
+    AutoExecution = True
+else:
+    AutoExecution = False
+
 # printer.log(current_user)
 while True:
-    user_prompt = input(f"Alfie :> ")
+    user_prompt = input("alfie Terminal :>")
     response = co_pilot.ai_query(user_prompt)
     ai_response  = response['choices'][0]['message']['content']
 
@@ -78,7 +93,23 @@ while True:
     co_pilot.build_context("assistant", ai_response)
     log(ai_response)
 
-    log("Would you like to execute the command?")
-    resp = input(" [Y/N] >: ")
+    # let's execute automatically now.
+    if AutoExecution:
+        try:
+            data = json.loads(ai_response)
+            if isinstance(data, dict):
+                command = data["single_execution_command"]
+                try:
+                    co_pilot.exceutor(command)
+                except Exception as e:
+                    log(e)
+
+        except Exception as e:
+            log(e)
+
+
+
+        # co_pilot.exceutor(command='clear')
+
 
 
