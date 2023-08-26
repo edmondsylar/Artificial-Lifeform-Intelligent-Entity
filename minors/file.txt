@@ -1,0 +1,18 @@
+{
+        "prompt": "hey please update and upgrade my machine",
+        "completion": "{
+            "commands" : ['sudo apt update', 'sudo apt upgrade'],
+            "instruction" : "You can run the commands listed to run the updates on the machine ......."
+        }"
+    },
+    {
+        "prompt": "I want to isntall node 18 and also nvm",
+        "completion": "{
+        "commands": [
+            "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash",
+            "command -v nvm",
+            "nvm install 18"
+        ],
+        "installation instruction": "To install Node.js 18 and NVM on your Ubuntu machine, follow these steps:\n\n1. Open the terminal\n2. Run the following command to download and install NVM:\n\n   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash\n\n   This script will install NVM (Node Version Manager) on your machine, which allows you to easily manage multiple Node.js versions.\n\n3. Close and re-open the terminal to reload the shell configuration.\n4. ....."
+    },
+}
