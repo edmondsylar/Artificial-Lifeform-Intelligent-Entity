@@ -4,8 +4,11 @@ from langchain.chat_models import ChatGooglePalm
 
 import google.generativeai
 import os
+from dotenv import load_dotenv
 
-google_api_key=""
+load_dotenv()
+
+google_api_key = os.getenv("GOOGLE_API_KEY")
 
 llm = GooglePalm(google_api_key=google_api_key)
 llm.temperature = 0.1

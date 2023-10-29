@@ -1,10 +1,18 @@
 from time import sleep
 import os
 import google.generativeai as palm
-palm.configure(api_key="")
+
 from rich.console import Console
 from functions.main_functions import build_prompt
 
+from dotenv import load_dotenv
+load_dotenv()
+
+google_api_key = os.getenv("GOOGLE_API_KEY")
+
+palm.configure(api_key=google_api_key)
+
+# declare console
 console = Console()
 
 

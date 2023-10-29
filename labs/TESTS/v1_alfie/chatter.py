@@ -19,9 +19,14 @@ from langchain.agents import AgentExecutor
 
 from langchain.agents.output_parsers import JSONAgentOutputParser
 from langchain.agents.format_scratchpad import format_log_to_messages
+from dotenv import load_dotenv
+
+load_dotenv()
+
+serpapi_api_key = os.getenv("SERPAPI_API_KEY")
 
 # set the serp api key
-os.environ["SERPAPI_API_KEY"] = ""
+os.environ["SERPAPI_API_KEY"] = serpapi_api_key
 
 search = SerpAPIWrapper()
 tools = [
