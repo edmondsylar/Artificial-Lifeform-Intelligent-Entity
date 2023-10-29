@@ -21,7 +21,7 @@ from langchain.agents.output_parsers import JSONAgentOutputParser
 from langchain.agents.format_scratchpad import format_log_to_messages
 
 # set the serp api key
-os.environ["SERPAPI_API_KEY"] = "4ae7638e2b578f791a3c51757fbd77094d145d57"
+os.environ["SERPAPI_API_KEY"] = ""
 
 search = SerpAPIWrapper()
 tools = [

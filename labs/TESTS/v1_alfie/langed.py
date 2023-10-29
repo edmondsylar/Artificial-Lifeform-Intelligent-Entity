@@ -5,7 +5,7 @@ from langchain.chat_models import ChatGooglePalm
 import google.generativeai
 import os
 
-google_api_key="AIzaSyDn2fvOXSrPnm7hxCYQKwClE93hWfk8ch0"
+google_api_key=""
 
 llm = GooglePalm(google_api_key=google_api_key)
 llm.temperature = 0.1

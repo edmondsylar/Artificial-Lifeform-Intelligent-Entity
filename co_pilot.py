@@ -1,7 +1,7 @@
 from time import sleep
 import os
 import google.generativeai as palm
-palm.configure(api_key="AIzaSyDn2fvOXSrPnm7hxCYQKwClE93hWfk8ch0")
+palm.configure(api_key="")
 from rich.console import Console
 from functions.main_functions import build_prompt
 

@@ -2,7 +2,7 @@ import google.generativeai as palm
 import os
 
 # Initialize the Google Palm2 API
-google_api_key = "AIzaSyDn2fvOXSrPnm7hxCYQKwClE93hWfk8ch0"
+google_api_key = ""
 palm.configure(api_key=google_api_key)
 
 # Define the agent
