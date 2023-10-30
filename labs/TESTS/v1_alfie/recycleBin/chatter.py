@@ -24,6 +24,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 serpapi_api_key = os.getenv("SERPAPI_API_KEY")
+google_api_key = os.getenv("GOOGLE_API_KEY")
 
 # set the serp api key
 os.environ["SERPAPI_API_KEY"] = serpapi_api_key
@@ -41,7 +42,7 @@ tools = [
 prompt = hub.pull("hwchase17/react-chat-json")
 llm = ChatGooglePalm(
                     temperature=0.5, 
-                    google_api_key="AIzaSyDn2fvOXSrPnm7hxCYQKwClE93hWfk8ch0"
+                    google_api_key=google_api_key
                     )
 
 prompt = prompt.partial(
