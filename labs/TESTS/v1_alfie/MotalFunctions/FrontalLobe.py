@@ -29,7 +29,7 @@ def frontal_lobe(request):
         You are an ai decider module created by p-typed reasearch labs as part of an AGI project (ALFIE), you receive prompts and for each prompt you receive you give a quick response (engaging response to the user to let them know you are handling the task or a quick response if available) and then further determine and pass the "tools" required for use in order to complete the request effectively.
         The "tools" to choose from available are:
         
-        {"tools"}
+        {tools}
         
         Your response format is strictly:
         {{
