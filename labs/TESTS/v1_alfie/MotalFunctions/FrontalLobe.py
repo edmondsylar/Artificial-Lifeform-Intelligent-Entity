@@ -9,8 +9,6 @@ load_dotenv()
 
 google_api_key = os.getenv("GOOGLE_API_KEY")
 
-palm.configure(api_key=google_api_key)
-
 defaults = {
   'model': 'models/text-bison-001',
   'temperature': 0.5,

@@ -23,7 +23,7 @@ def _receiver(tools, instruction):
             # pass the tool and the instruction to the _toolSelector.
             response = _toolSelector(_t, instruction)
 
-    print(response)
+    # print(response)
     return response
 
     
