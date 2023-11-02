@@ -7,14 +7,14 @@ from SystemModules.memory_management import _build_memory
 from SystemModules.decision import decider
 from rich.console import Console
 from Tools.image_generation import generate_image
-from wrappers.memory import memory_wrapper
+from wrappers.memory import prompt_builder
 
 console = Console()
 
-# key : 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
+
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-@memory_wrapper
+
 def chat():
     main_instance = openai.ChatCompletion.create(
             model="gpt-3.5-turbo-16k",
@@ -27,11 +27,18 @@ def chat():
     console.print(ai_response['content'])
     return response
 
+@prompt_builder('@USER')
+def _interact(user_request):
+    return user_request
+    
 
 # this will run as a thread.
 def _system():
     while True:
         comm = input("\n ALFIE ::>> ")
+        comm = _interact(comm)
+
+        # threading.Thread(target=_interact, args=(comm,)).start()
         # build prompt here.
         dc = decider(comm)
         if len(dc['tools']) <= 0:
