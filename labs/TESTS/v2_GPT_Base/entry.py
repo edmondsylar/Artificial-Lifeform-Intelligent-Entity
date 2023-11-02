@@ -11,7 +11,6 @@ from wrappers.memory import prompt_builder
 
 console = Console()
 
-
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
