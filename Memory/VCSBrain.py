@@ -5,7 +5,7 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import FAISS
 
-os.environ['OPENAI_API_KEY'] = "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"
+os.environ['OPENAI_API_KEY'] = ""
 
 
 # get the general knowledge file from the current directory.

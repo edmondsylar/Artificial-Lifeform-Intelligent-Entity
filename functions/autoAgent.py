@@ -1,6 +1,6 @@
 import autogen 
 
-config_list = [{'model': 'gpt-3.5-turbo-1106', 'api_key': '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'},]
+config_list = [{'model': 'gpt-3.5-turbo-1106', 'api_key': ''},]
 
 assistant = autogen.AssistantAgent(
     llm_config={

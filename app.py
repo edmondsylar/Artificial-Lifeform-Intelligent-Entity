@@ -7,7 +7,7 @@ console = Console()
 
 # initial message
 _interact("""
-Edmond Has come, He is admin, start the conversation with an appropriate greeting. and message.
+start a conversation with the user now.
 """)
 
 # main app entry point
