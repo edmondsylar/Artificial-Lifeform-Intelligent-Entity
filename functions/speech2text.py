@@ -10,9 +10,11 @@ from rich.console import Console
 from functions.auto import stream_and_play
 from dotenv import load_dotenv
 import os
-from vocals import _speak
-load_dotenv()
+from functions.speech_control import add_task
 
+
+
+load_dotenv()
 # get key from .env file
 key = os.getenv("OPENAI_API_KEY")
 
@@ -57,5 +59,10 @@ def _interact(msg):
 
     console.print("\n ALFIE: ", model_response, style="bold green")
     
-    # send the audio transction to the stream_and_play function in a new thread.
-    threading.Thread(target=_speak, args=(model_response,)).start()
+    # add the response to the speech tasks in a new thread.
+    threading.Thread(target=add_task, args=(model_response,)).start()
+    
+
+    
+    # # send the audio transction to the stream_and_play function in a new thread.
+    # threading.Thread(target=_speak, args=(model_response,)).start()

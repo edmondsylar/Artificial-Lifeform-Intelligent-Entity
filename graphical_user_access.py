@@ -26,12 +26,16 @@ query_holder.pack(side="left",padx=10,pady=10)
 # print entered text after user clicks enter.
 def print_text(event):
     request = query.get()
+    print(request)
 
     # call the _interact function in a new thread
     threading.Thread(target=_interact, args=(request,)).start()
     query_holder.delete(0, 'end')
 
-# bind the enter key to the print_text function.
-query_holder.bind("<Return>", print_text)
-# run the app mainloop.
-app.mainloop()
+
+
+def _run_graphical_user_input():
+    # bind the enter key to the print_text function.
+    query_holder.bind("<Return>", print_text)
+    # run the app mainloop.
+    app.mainloop()
