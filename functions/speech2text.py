@@ -50,8 +50,8 @@ def _build_conversation_list(role, content):
 def _interact(msg):
 
     # call the "input_control" file from the functions folder using the subprocess module and pass the user request as an argument. open in a new thread and terminal window.
-    subprocess.Popen(["python3", "input_control.py", msg], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    # subprocess.Popen(["python", "input_control.py", msg])
+    subprocess.Popen(["python", "input_control.py", msg], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
 
     _build_conversation_list("user", msg)
 

@@ -1,5 +1,8 @@
 {
     "switch": false,
-    "tasks": [],
-    "system_perset": "debug"
+    "input_console_status": false,
+    "tasks": [
+        "Ah, I understand the mix-up. As an AGI system, I'm designed to understand and adapt to various communication styles. How can I assist you, Alfie VI?"
+    ],
+    "system_perset": "production"
 }

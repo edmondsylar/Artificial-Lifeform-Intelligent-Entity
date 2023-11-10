@@ -5,7 +5,7 @@ import os
 import argparse
 import json
 import threading
-from TextInput import _use_command_line
+import subprocess
 
 
 # Initialize the parser
@@ -98,9 +98,7 @@ if isinstance(response, dict):
         # loop through the tools list and print the tools
         for tool in tools:
             if tool == "text_input":
-                # call the text_input function in a new thread and close the current thread
-                threading.Thread(target=_use_command_line).start()
-                exit()
-                
+                # using the subprocess module call the system_executor file and pass a command.
+                subprocess.Popen(["python", "system_executor.py", "TextInput.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         exit()

@@ -1,6 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 import threading
+import subprocess
 
 # impor the interact function from the speech2text file
 from functions.speech2text import _interact
@@ -44,10 +45,20 @@ def _run_graphical_user_input():
         # run the app mainloop.
         app.mainloop()
 
-
-
 def _use_command_line():
-    user_text = input("Enter your text: \n")
-    # call the _interact function in a new thread
-    threading.Thread(target=_interact, args=(user_text,)).start()
     
+    while True:
+        user_text = input("Enter your text input On the new Line: \n")
+
+        if user_text == "exit":
+            break
+        # call the _interact function in a new thread
+        threading.Thread(target=_interact, args=(user_text,)).start()
+    
+    # close the command line interface.
+    # exit()
+    # subprocess.run("exit")
+
+    
+# run the use command line function.
+_use_command_line()
