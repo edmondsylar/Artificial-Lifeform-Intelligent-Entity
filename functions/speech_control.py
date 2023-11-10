@@ -1,6 +1,7 @@
 import json
 import time
 from functions.systemExecutor import run_vocals
+import subprocess
 
 
 def update_switch(state):
@@ -42,7 +43,7 @@ def check_switch():
 
 def _run_speech_Control_engine():
     while True:
-        print("Running speech engine...")
+        print("Alfie: Speech Control Engine Running...")
         if not check_switch():
             with open('switch.json', 'r') as f:
                 data = json.load(f)
@@ -52,6 +53,8 @@ def _run_speech_Control_engine():
                     run_vocals(task)
                     remove_task(task)
         time.sleep(2)
+        # clear the screen
+        # subprocess.run("clear")
 
 def update_system_perset(value):
     with open('switch.json', 'r+') as f:

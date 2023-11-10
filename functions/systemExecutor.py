@@ -3,7 +3,7 @@ import threading
 
 def run_vocals(text):
 
-    string = fr".. {text} .."
+    string = fr"\t {text}"
 
     print(string)
 

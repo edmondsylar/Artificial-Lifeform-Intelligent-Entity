@@ -11,6 +11,7 @@ from functions.auto import stream_and_play
 from dotenv import load_dotenv
 import os
 from functions.speech_control import add_task
+import subprocess
 
 
 
@@ -47,6 +48,11 @@ def _build_conversation_list(role, content):
 
 # function to call the chatComplete endpoint 
 def _interact(msg):
+
+    # call the "input_control" file from the functions folder using the subprocess module and pass the user request as an argument. open in a new thread and terminal window.
+    subprocess.Popen(["python3", "input_control.py", msg], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # subprocess.Popen(["python", "input_control.py", msg])
+
     _build_conversation_list("user", msg)
 
     response = client.chat.completions.create(

@@ -12,7 +12,7 @@ threading.Thread(target=start_speech_recognition).start()
 
 
 # start the graphical user input in the main thread
-_run_graphical_user_input()
+# _run_graphical_user_input()
 
 
 while True:
