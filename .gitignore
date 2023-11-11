@@ -2,4 +2,5 @@ env/
 __pycache__/
 .cache/
 .gitignore
-.env
+.env/
+vosk-model-small-en-us-0.15/
