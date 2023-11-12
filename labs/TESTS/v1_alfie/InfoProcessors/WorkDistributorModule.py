@@ -15,17 +15,18 @@ def grow_tools(tools):
 def _receiver(tools, instruction):
     # grow toold first.
     grow_tools(tools)
+    response = None
 
     # check for tools and perform actions here.
     for _t in tools:
         if _t in active_tools:
             # pass the tool and the instruction to the _toolSelector.
-            _toolSelector(_t, instruction)
+            response = _toolSelector(_t, instruction)
 
-            
+    # print(response)
+    return response
 
-    print(f"take action with the following tools {tools} and follow these instructions {instruction}")
-    return True
+    
 
 
 

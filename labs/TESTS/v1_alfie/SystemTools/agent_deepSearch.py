@@ -2,6 +2,7 @@
 from langchain.tools import DuckDuckGoSearchResults
 from langchain.tools import DuckDuckGoSearchRun
 from .agent_configs import *
+from langchain.agents import AgentType
 
 search = DuckDuckGoSearchRun()
 

@@ -2,6 +2,8 @@
 from SystemTools.system_execution import _execution
 from SystemTools.agent_sysExec import agent_sysExec
 from SystemTools.agent_deepSearch import agent_deepSearch
+from SystemTools.agent_financialAdvisor import agent_financialAdvisor
+from SystemTools.agent_CodeSimulator import agent_CodeSimulator
 
 import json
 
@@ -20,7 +22,10 @@ def _perform(func, *args, **kwargs):
 
 def _toolSelector(tool, instruction):
     if tool == "system_execution":
-        _perform(_execution, instruction)
+        _perform(agent_sysExec, instruction)
     elif tool == "web_crawler":
-        agent_sysExec(instruction)
-
+        _perform(agent_deepSearch, instruction)
+    elif tool == "financial_advisor":
+        _perform(agent_financialAdvisor, instruction)
+    elif tool == "code_generator":
+        _perform(agent_CodeSimulator, instruction)

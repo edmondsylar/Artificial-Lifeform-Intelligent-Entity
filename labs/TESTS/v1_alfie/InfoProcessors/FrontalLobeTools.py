@@ -9,5 +9,7 @@ logic_engine: This tools is called upon when the request requires deep logical r
 rpa_bot: if you require to trigger automations in the background to complete given tasks.
 contact_admin: when the request requires you to reach out to the administrator.
 take_action: this tool is called upon when the request requires taking some action like completing a task.
-email_communications: This Tool is used to share information to the identified or specified emails
+financial_advisor: This tools helps you access more reliable financial information.
+email_communications: This Tool is used to share information to the identified or specified emails.
+code_generator: this function is called upon when the request requires a programatic approach.
 """
