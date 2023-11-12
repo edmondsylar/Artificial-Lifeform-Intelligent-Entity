@@ -28,7 +28,7 @@ def _context(user_prompt, data):
                                 verbose=True
                                 )
         # predicting the user response basing on the previus requests
-
+        
         output=conversation.predict(input=user_prompt)
         memory.save_context({"input": user_prompt},
                             {"output": data})
