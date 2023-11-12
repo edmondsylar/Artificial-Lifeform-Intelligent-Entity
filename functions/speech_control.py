@@ -56,16 +56,16 @@ def _run_speech_Control_engine():
         # clear the screen
         # subprocess.run("clear")
 
-def update_system_perset(value):
+def update_system_preset(value):
     with open('switch.json', 'r+') as f:
         data = json.load(f)
-        data['system_perset'] = value
+        data['system_preset'] = value
         f.seek(0)
         json.dump(data, f, indent=4)
         f.truncate()
 
 
-def check_system_perset():
+def check_system_preset():
     with open('switch.json', 'r') as f:
         data = json.load(f)
-        return data.get('system_perset', "")
+        return data.get('system_preset', "")
