@@ -33,6 +33,6 @@ def _copilot(pt):
 
     response = palm.generate_text(
     **co_pilot_defaults,
-    prompt=prompt
-    )
+    prompt=prompt)
+    
     return response
