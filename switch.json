@@ -2,7 +2,9 @@
     "switch": false,
     "input_console_status": false,
     "tasks": [
-        "Ah, I understand the mix-up. As an AGI system, I'm designed to understand and adapt to various communication styles. How can I assist you, Alfie VI?"
+        "Ah, I understand the mix-up. As an AGI system, I'm designed to understand and adapt to various communication styles. How can I assist you, Alfie VI?",
+        "Understood! If you have any questions or need assistance, feel free to ask.",
+        "Greetings! How can I assist you today?"
     ],
     "system_perset": "production"
 }

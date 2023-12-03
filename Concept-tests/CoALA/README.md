@@ -49,3 +49,10 @@ This project is licensed under the MIT License - see the `LICENSE.md` file for d
 ## COALA Paper
 
 For a detailed understanding of the concepts and methodologies used in the development of COALA, please refer to our paper available on arXiv. You can access the paper at [this link](https://arxiv.org/abs/2309.02427).
+
+
+## Pause Notice.
+In my dvelopments in this direction i have found nee to first put a pause to this particular approach and firstly understand the ACE (Autonomous Cognitive Entities).   
+this a framework for designing ethical artificial general intelligence systems based on a layered cognitive architecture, systems much like A.L.F.I.E (Artificial LifeForm Intelligent Entity), meanwhile the same paper implements a system (stacey) with interfaces like the we and discord.  
+
+In the meantime we are going to focus on anothe paper(Conceptual Framework for Autonomous Cognitive Entities by David Shapiro). the paper focuses mainly on implementing an ACE based system. we'll be linking the source code in this readme when ready.

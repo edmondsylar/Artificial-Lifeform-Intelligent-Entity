@@ -22,13 +22,13 @@ def search(query):
     # convert the response to a json object 
     try:
         resp = json.loads(response.text)
-        results =   
+        results = resp
         console.print(type(results["searchParameters"]), results["knowledgeGraph"])
-        return results["answerBox"]
+        return results["knowledgeGraph"]
 
     except Exception as er:
-        console.print(f"Error: Could not parse response, {er}, {response.text}")
+        console.print(f"Error: Could not parse response, {er}")
         return
 
 
-search("Who is the current President of the Uganda")
+search("when was donald trump born")
