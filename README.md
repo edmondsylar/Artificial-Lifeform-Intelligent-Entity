@@ -26,3 +26,7 @@ The framework consists of six hierarchical layers, each handling distinct functi
 Information flows bidirectionally between adjacent layers to coordinate cognition from abstract reasoning to concrete actions. Together, these layers aim to produce an AGI architecture grounded in ethics and aligned with human values.
 
 The ACE framework provides a conceptual blueprint for autonomous agents that are corrigible, transparent, and beneficial by design. It balances goal-directedness with moral principles to shape behavior. By elucidating this layered cognitive architecture, the ACE framework offers a comprehensive reference for developing aligned AGI.
+
+
+## Structure.  
+The project is structured accorsding to the framework as you will find incase you need to read/tag-along.   
