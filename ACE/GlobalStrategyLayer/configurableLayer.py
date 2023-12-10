@@ -27,7 +27,7 @@ class ConfigurableLayer:
         # The constitution is a text that describes the moral and ethical principles that the agent is to follow
         self.constitution = constitution
 
-
+        # The constitutionClassifier is a text that describes the moral and ethical principles that the agent is to follow 
         self.constitutionClassifier = fr'''
         you are A natural language constitution classifier, which can check if the texts comply with the natural language constitution or not
         You respond with a simple evaluation report in the format below:
@@ -97,7 +97,7 @@ class ConfigurableLayer:
 
         # add the situation to the conversation.
         self.build_gpt_conversation(role='user', content=situation)
-
+        return True
         # add the situation to the conversation.
 
     def get_rulings(self, constitutionClassifier, response):
@@ -121,6 +121,7 @@ class ConfigurableLayer:
     def add_context(self, situation, context):
         # This method adds a new context to the dictionary, associated with a situation
         self.contexts[situation] = context
+        return True 
     
     def add_feedback(self, feedback):
         # This method adds a new feedback to the list

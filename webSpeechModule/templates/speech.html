@@ -1,0 +1,114 @@
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">AFLIE Speech Engine</h5>
+        <p class="card-text">
+            Start and monitor the speech engine and module from the
+        </p>
+
+        <div class="row">
+
+            <!-- Transcription and response -->
+            <div class="col-sm-8" id="assistant_window" >
+                <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">AI Assistance</h5>
+                      <h6 class="card-subtitle mb-2 text-body-secondary">Model: Palm2 (Google)</h6>
+                      <p class="card-text">
+
+                        <br>
+                        <span id="ai_response" class="text-body-secondary>">
+                            nothing yet!
+                        </span>
+                        <br>
+                      </p>
+                      <!-- <a href="#" class="card-link">Card link</a> -->
+                      <a href="#" class="card-link">Regenerate Response</a>
+                    </div>
+                  </div>
+            </div>
+
+            <!-- Requesting a transcription -->
+            <div class="col-sm-4 mt-5">
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Transcription</label>
+                    <textarea readonly placeholder="Whisper Transcription" class="form-control" id="exampleFormControlTextarea1" rows="8"></textarea>
+                </div>
+            </div>
+
+        </div>
+        
+
+        
+    </div>
+    <button id="record-btn" class="btn btn-primary btn-sm">Start Recording</button>
+    <button id="stop-btn" class="btn btn-danger btn-sm" disabled>Stop Recording</button>
+    <audio id="audio-player"></audio>
+</div>
+
+<script>
+    const recordBtn = document.getElementById("record-btn");
+    const stopBtn = document.getElementById("stop-btn");
+    // const playBtn = document.getElementById("play-btn");
+    const audioPlayer = document.getElementById("audio-player");
+    let recorder, audioChunks;
+
+    recordBtn.addEventListener("click", async () => {
+        recordBtn.disabled = true;
+        stopBtn.disabled = false;
+
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                recorder = new MediaRecorder(stream);
+                audioChunks = [];
+                recorder.ondataavailable = e => audioChunks.push(e.data);
+                recorder.start();
+            })
+            .catch(err => console.error(err));
+    });
+
+    stopBtn.addEventListener("click", () => {
+        recordBtn.disabled = false;
+        stopBtn.disabled = true;
+        // playBtn.disabled = false;
+
+        recorder.stop();
+        recorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+            const formData = new FormData();
+            formData.append("audio", audioBlob, "audio.webm");
+
+            fetch('/audio', {
+                method: 'POST',
+                body: formData, // replace with your audio data
+            })
+            .then(response => response.json()) // assuming the server responds with JSON
+            .then(result => {
+                console.log(result);
+                if (result.message === 'Audio recording saved successfully!') {
+                    // Access the transcription from the result
+                    const transcription = result.transcription;
+                    console.log(transcription);
+
+                    
+                    // Trigger your action here with the ai_response
+                    const aiResponseElement = document.getElementById("ai_response");
+                    aiResponseElement.innerHTML = result.ai_response;
+                    aiResponseElement.classList.remove("d-none");
+
+                    // set the trsncription to the textarea
+                    document.getElementById("exampleFormControlTextarea1").innerHTML = transcription;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        };
+    });
+
+    // this is the play button code 
+    // playBtn.addEventListener("click", () => {
+    //     const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+    //     const audioUrl = URL.createObjectURL(audioBlob);
+    //     audioPlayer.src = audioUrl;
+    //     audioPlayer.play();
+    // });
+</script>

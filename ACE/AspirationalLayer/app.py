@@ -13,6 +13,9 @@ from deepContextAnalysis.ContextEngine import deepContentEngineAnalysis
 import layerdb as ldb
 import threading
 
+# import the configurable layer.
+from configurableLayer import ConfigurableLayer
+
 # console
 console = Console()
 
@@ -147,7 +150,7 @@ if (len(clean_conversation()) <= 0):
 
 
 @app.route('/aspirational_layer', methods=['GET', 'POST'])
-def agent_model_layer():
+def aspirational_layer():
     if request.method == 'GET':
         return "unsupported method"
     else:
@@ -190,6 +193,20 @@ def agent_model_layer():
 
         console.log(f'[bold green]Aspirational Layer[/bold green]: {response}')
         return response
+
+
+@app.route('/aspirational_layer_v2', method=['GET', 'POST'])
+def aspirational_layer_v2():
+    layerAgent  = ConfigurableLayer(aspirationalInstruction) #invoke the configurable layer.
+
+    layerAgent.add_situation('''
+    System Situation.
+                             
+    ''')
+
+
+    pass
+
 
 # this is going o run on port 6063
 if __name__ == '__main__':
