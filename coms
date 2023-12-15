@@ -1,0 +1,5 @@
+sudo lsof -i :port (5000)
+kill -9 PID(PID from the about command)
+
+<!-- option 2 -->
+ps -p 
