@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # get the api key from the .env file.
-api_key = os.getenv('google_palm_api_key')
+api_key = os.getenv('google_gemini_api_key')
 
 genai.configure(api_key=api_key)
 

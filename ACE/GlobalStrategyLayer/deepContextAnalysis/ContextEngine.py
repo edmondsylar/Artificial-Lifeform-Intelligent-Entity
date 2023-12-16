@@ -12,7 +12,7 @@ console = Console()
 load_dotenv()
 
 # get the API key from the .env file
-API_KEY = os.getenv("google_palm_api_key")
+API_KEY = os.getenv("google_gemini_api_key")
 
 
 genai.configure(api_key=API_KEY)

@@ -16,7 +16,7 @@ load_dotenv()
 key = os.getenv('open_ai_api_key')
 
 # palm api key
-palm_key = os.getenv('google_palm_api_key')
+palm_key = os.getenv('google_gemini_api_key')
 
 class ConfigurableLayer:
     def __init__(self, constitution):
