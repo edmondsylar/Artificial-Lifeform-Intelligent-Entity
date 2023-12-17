@@ -12,8 +12,11 @@ perceptions = [] # list of perceptions from the model
 # load .env file
 load_dotenv()
 
+# get the key.
+gemini_key = os.getenv('google_gemini_api_key')
+
 # gemini api key
-genai.configure(api_key=os.getenv('google_gemini_api_key'))
+genai.configure(api_key="AIzaSyDP20o8c9aoNlns4w49TywukOhXRUNHnxE")
 
 # Set up the model
 generation_config = {
@@ -88,39 +91,40 @@ def insights_loop():
     for image in os.listdir(os.path.join(ablsolute_path, 'images')):
       images.append(os.path.join(ablsolute_path, 'images', image))
 
-    if len(images) < 5:
-      print('My Eyes are still closed')
+    if len(images) > 5:
+      prompt = f"""
+        #Grounding Instruction.
+        You are the eyes of a system that is trying to understand the world. you receive images every 2 seconds and just respond with imporatnt insights about the image. for the sysystem to properly understand what it needs, you also receive your previous outputs to help you better understand the concept of motion.
+
+        #previous outputs
+        {perceptions}
+
+        # Note: These can be empty if the system has just started.
+
+        Current Time: {datetime.now().strftime("%H:%M:%S")}
+        """
+      # Get the last 5 images in the list
+      last_5_images = images[-5:]
+
+      # Generate insights
+      modelinsights = generate_insights(last_5_images, prompt)
+
+      # Print the insights
+      
+
+      insights = {
+        'time': datetime.now().strftime("%H:%M:%S"),
+        'insights': modelinsights
+      }
+
+      print(insights)    
+      # Delete the images
+      delete_images(last_5_images)
+
+      time.sleep(5)
+    else:
+      print('My Eyes are still closed, will resume in 12.5 seconds....')
       continue
-    prompt = f"""
-      #Grounding Instruction.
-      You are the eyes of a system that is trying to understand the world. you receive images every 2 seconds and just respond with imporatnt insights about the image. for the sysystem to properly understand what it needs, you also receive your previous outputs to help you better understand the concept of motion.
-
-      #previous outputs
-      {perceptions}
-
-      # Note: These can be empty if the system has just started.
-
-      Current Time: {datetime.now().strftime("%H:%M:%S")}
-      """
-    # Get the last 5 images
-    last_5_images = images[-5:]
-
-    # Generate insights
-    modelinsights = generate_insights(last_5_images, prompt)
-
-    # Print the insights
-    
-
-    insights = {
-      'time': datetime.now().strftime("%H:%M:%S"),
-      'insights': modelinsights
-    }
-
-    print(insights)    
-    # Delete the images
-    delete_images(last_5_images)
-
-    time.sleep(5)
 
 # run the insights loop as the main thread
 if __name__ == '__main__':
