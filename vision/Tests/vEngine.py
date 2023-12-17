@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 import time
 from datetime import datetime
 
+images = [] # list of images
+perceptions = [] # list of perceptions from the model
+
 # load .env file
 load_dotenv()
 
@@ -45,6 +48,14 @@ model = genai.GenerativeModel(
     safety_settings=safety_settings
     )
 
+def delete_images(image_urls):
+  for image_url in image_urls:
+    if os.path.isfile(image_url):
+      os.remove(image_url)
+    else:
+      print(f"Error: {image_url} not a valid filename")
+
+
 # generate insights function 
 def generate_insights(images, prompt):
     # Set up the model
@@ -66,37 +77,40 @@ def generate_insights(images, prompt):
     return response.text
 
 # absolute path to this file
-# ablsolute_path = Path(__file__).parent.absolute()
+ablsolute_path = Path(__file__).parent.absolute()
 
-# # list of the images
-# images = []
-
-# for i in range(1,6):
-#     img_locaation = ablsolute_path / f"images/{i}.jpg"
-#     # convert to string
-#     images.append(str(img_locaation))
+# list of the images
 
 
-# perceptions = []
-
-# # we are going to send one image at a time with a 2 sencod delay between each image
-# # this is to simulate a real world use case
-# for img in images:
-#     prompt = f"""
-#     #Grounding Instruction.
-#     You are the eyes of a system that is trying to understand the world. you receive images every 2 seconds and just respond with imporatnt insights about the image. for the sysystem to properly understand what it needs, you also receive your previous outputs to help you better understand the concept of motion.
-
-#     #previous outputs
-#     {perceptions}
-
-#     # Note: These can be empty if the system has just started.
-
-#     Current Time: {datetime.now().strftime("%H:%M:%S")}
-#     """
+# get all the images
+for image in os.listdir(os.path.join(ablsolute_path, 'images')):
+    images.append(os.path.join(ablsolute_path, 'images', image))
 
 
-#     response = generate_insights([img], prompt)
-#     print(response, "\n\n")
-#     perceptions.append(str(response))
+print (images)
+
+
+
+# we are going to send one image at a time with a 2 sencod delay between each image
+# this is to simulate a real world use case
+for img in images[]: #last 10 images
+    prompt = f"""
+    #Grounding Instruction.
+    You are the eyes of a system that is trying to understand the world. you receive images every 2 seconds and just respond with imporatnt insights about the image. for the sysystem to properly understand what it needs, you also receive your previous outputs to help you better understand the concept of motion.
+
+    #previous outputs
+    {perceptions}
+
+    # Note: These can be empty if the system has just started.
+
+    Current Time: {datetime.now().strftime("%H:%M:%S")}
+    """
+
+
+    response = generate_insights([img], prompt)
+    print(response, "\n\n")
+    perceptions.append(str(response))
 
     time.sleep(2)
+
+
