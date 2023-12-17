@@ -79,38 +79,49 @@ def generate_insights(images, prompt):
 # absolute path to this file
 ablsolute_path = Path(__file__).parent.absolute()
 
-# list of the images
+def insights_loop():
+  while True:
+    print('running...')
+    time.sleep(5)
 
+    # get the images
+    for image in os.listdir(os.path.join(ablsolute_path, 'images')):
+      images.append(os.path.join(ablsolute_path, 'images', image))
 
-# get all the images
-for image in os.listdir(os.path.join(ablsolute_path, 'images')):
-    images.append(os.path.join(ablsolute_path, 'images', image))
-
-
-print (images)
-
-
-
-# we are going to send one image at a time with a 2 sencod delay between each image
-# this is to simulate a real world use case
-for img in images[]: #last 10 images
+    if len(images) < 5:
+      print('My Eyes are still closed')
+      continue
     prompt = f"""
-    #Grounding Instruction.
-    You are the eyes of a system that is trying to understand the world. you receive images every 2 seconds and just respond with imporatnt insights about the image. for the sysystem to properly understand what it needs, you also receive your previous outputs to help you better understand the concept of motion.
+      #Grounding Instruction.
+      You are the eyes of a system that is trying to understand the world. you receive images every 2 seconds and just respond with imporatnt insights about the image. for the sysystem to properly understand what it needs, you also receive your previous outputs to help you better understand the concept of motion.
 
-    #previous outputs
-    {perceptions}
+      #previous outputs
+      {perceptions}
 
-    # Note: These can be empty if the system has just started.
+      # Note: These can be empty if the system has just started.
 
-    Current Time: {datetime.now().strftime("%H:%M:%S")}
-    """
+      Current Time: {datetime.now().strftime("%H:%M:%S")}
+      """
+    # Get the last 5 images
+    last_5_images = images[-5:]
 
+    # Generate insights
+    modelinsights = generate_insights(last_5_images, prompt)
 
-    response = generate_insights([img], prompt)
-    print(response, "\n\n")
-    perceptions.append(str(response))
+    # Print the insights
+    
 
-    time.sleep(2)
+    insights = {
+      'time': datetime.now().strftime("%H:%M:%S"),
+      'insights': modelinsights
+    }
 
+    print(insights)    
+    # Delete the images
+    delete_images(last_5_images)
 
+    time.sleep(5)
+
+# run the insights loop as the main thread
+if __name__ == '__main__':
+  insights_loop()
