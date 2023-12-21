@@ -18,12 +18,22 @@
 
                         <br>
                         <span id="ai_response" class="text-body-secondary>">
-                            nothing yet!
+                            <!-- nothing yet! -->
                         </span>
                         <br>
+
+                        <!-- simple input with id 'system_prompt' -->
+                        <label for="exampleFormControlTextarea1">System Input</label>
+                        <input type="text" id="system_prompt" class="form-control" placeholder="Enter your response here" aria-label="Enter your response here" aria-describedby="button-addon2">
+
+                        <br>
+                        <label for="previous_message" class="" >Previous input</label><br>
+                        <span id="previous_msg">
+
+                        </span>
                       </p>
-                      <!-- <a href="#" class="card-link">Card link</a> -->
-                      <a href="#" class="card-link">Regenerate Response</a>
+                      <!-- <a href="#" class="card-link">Card link</a>
+                      <a href="#" class="card-link">Regenerate Response</a> -->
                     </div>
                   </div>
             </div>
@@ -49,6 +59,49 @@
 <script>
     const recordBtn = document.getElementById("record-btn");
     const stopBtn = document.getElementById("stop-btn");
+    const systemInput = document.getElementById("system_prompt");
+
+    // add event listener to the system input
+    systemInput.addEventListener("keyup", async function(event){
+        // console.log(event.key);
+        if(event.key === 'Enter'){
+            const formData = new FormData();
+            formData.append("system_prompt", systemInput.value);
+
+            console.log(formData);
+
+            // call the api and pass the form data.
+            fetch('/text_input', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({system_prompt: systemInput.value}), // replace with your audio data
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                // set the value of the previous message
+                const previousMsgElement = document.getElementById("previous_msg");
+                previousMsgElement.innerHTML = systemInput.value;
+
+                // clear the system input
+                systemInput.value = '';
+
+                return response.json(); // assuming the server responds with JSON
+            })
+            .then(result => {
+                console.log(result);
+            })
+            .catch(e => {
+                console.log('There was a problem with your fetch operation: ' + e.message);
+            });
+        }        
+
+    });
+
+
     // const playBtn = document.getElementById("play-btn");
     const audioPlayer = document.getElementById("audio-player");
     let recorder, audioChunks;
@@ -103,12 +156,4 @@
             .catch(error => console.error('Error:', error));
         };
     });
-
-    // this is the play button code 
-    // playBtn.addEventListener("click", () => {
-    //     const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-    //     const audioUrl = URL.createObjectURL(audioBlob);
-    //     audioPlayer.src = audioUrl;
-    //     audioPlayer.play();
-    // });
 </script>

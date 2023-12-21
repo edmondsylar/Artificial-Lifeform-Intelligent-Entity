@@ -17,7 +17,7 @@ load_dotenv()
 # gemini api key
 gemini_key = os.getenv('google_gemini_api_key')
 
-gemini.configure(api_key=gemini_key)
+gemini.configure(api_key=' ')
 
 class GeminiSupport:
     def __init__(self, constitution):
@@ -28,7 +28,8 @@ class GeminiSupport:
         self.strict_output_format = fr"""
             You are are the aspirational layer of an ACE (Autonomous Cognitive Entity). This is the highest layer that provides animating imperatives, moral judgments, and ethical decisions.
 
-            Only provide the imperatives, moral judgments, and ethical decisions based on the current context for the next layers to respond in accordance.
+            Provide the system with imperatives, moral judgments, and ethical decisions based on the current context for the next layers to respond in accordance.
+            And Finally, provide advise for the next layers to follow in accordance to the imperatives, moral judgments, and ethical decisions.
         """
 
         # configure gemini

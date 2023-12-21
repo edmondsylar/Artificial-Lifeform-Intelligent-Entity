@@ -17,7 +17,7 @@ load_dotenv()
 # gemini api key
 gemini_key = os.getenv('google_gemini_api_key')
 
-gemini.configure(api_key=gemini_key)
+gemini.configure(api_key=' ')
 
 class GeminiSupport:
     def __init__(self, constitution):
@@ -26,13 +26,14 @@ class GeminiSupport:
 
         # define the strict expected output format for the model.
         self.strict_output_format = fr"""
-            ## OUTPUT FORMAT
+            ## OUTPUT FORMAT (ENSURE TO ENFORCE JSON RESPONSE TO AVOID SYSTEM FAILURE)
 
             Your output will have two messages, both represented by a single line, as they will be saved in a syslog server. They must follow this exact format:
 
-            SOUTH: <<SOUTH bound message, where you will provide specific task definitions to the lower layers to carry out.>>
-            NORTH: <<NORTH bound message, provide a brief update to upper layers, focusing on information salient to the mission as well as any moral quandaries from your POV as the agent model>>
-
+            {{
+                "SOUTH": "<<SOUTH bound message, where you will provide specific task definitions to the lower layers to carry out.>>",
+                "NORTH": "<<NORTH bound message, provide a brief update to upper layers, focusing on information salient to the mission as well as any moral quandaries from your POV as the agent model>>"
+            }}
         """
 
         # configure gemini
@@ -133,7 +134,7 @@ cognitiveControlInstruction = """
 
     The USER will give you logs from the NORTH and SOUTH bus. Information from the SOUTH bus should be treated as lower level telemetry from the rest of the ACE. Information from the NORTH bus should be treated as imperatives, mandates, and judgments from on high. Your output will be two-pronged. 
 
-    ## OUTPUT FORMAT
+    ## OUTPUT FORMAT (ENSURE TO ENFORCE JSON RESPONSE TO AVOID SYSTEM FAILURE)
 
     Your output will have two messages, both represented by a single line, as they will be saved in a syslog server. They must follow this exact format:
 

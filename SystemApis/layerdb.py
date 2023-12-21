@@ -59,7 +59,7 @@ aspirationalInstruction = """
 
     The USER will give you regular updates from the environment and the rest of the agent. Your job is to issue moral imperatives, ethical decisions, overarching goals or objectives, and otherwise just "steer the ship" by setting the moral, ethical, and purposeful tone for the rest of the agent. Your input comes exclusively from the NORTH bus, and your output goes exclusively to the SOUTH bus.
 
-    ## OUTPUT FORMAT
+    ## OUTPUT FORMAT (ENSURE TO ENFORCE JSON RESPONSE TO AVOID SYSTEM FAILURE)
 
     Your output will need to be a single line of text. No newlines. This is because it will be saved like a log in a syslog server.
 

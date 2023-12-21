@@ -77,7 +77,7 @@ ExecutiveFunctionInstuction = """
 
     The USER will give you logs from the NORTH and SOUTH bus. Information from the SOUTH bus should be treated as lower level telemetry from the rest of the ACE. Information from the NORTH bus should be treated as imperatives, mandates, and judgments from on high. Your output will be two-pronged. 
 
-    ## OUTPUT FORMAT
+    ## OUTPUT FORMAT (ENSURE TO ENFORCE JSON RESPONSE TO AVOID SYSTEM FAILURE)
 
     Your output will have two messages, both represented by a single line, as they will be saved in a syslog server. They must follow this exact format:
 
