@@ -14,7 +14,7 @@ def sentimentDetection(context, text):
     Note: The sentiment can be either positive or negative and explain why you think so.
 
 
-    """
+    """ 
 
     return (_promtTemplate)
 

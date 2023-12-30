@@ -29,4 +29,4 @@ The ACE framework provides a conceptual blueprint for autonomous agents that are
 
 
 ## Structure.  
-The project is structured accorsding to the framework as you will find incase you need to read/tag-along.   
+The project is structured according to the framework as you will find incase you need to read/tag-along.   
