@@ -16,7 +16,7 @@ load_dotenv()
 gemini_key = os.getenv('google_gemini_api_key')
 
 
-genai.configure(api_key=' ')
+genai.configure( api_key='AIzaSyDP20o8c9aoNlns4w49TywukOhXRUNHnxE')
 
 
 class OrcSupport:

@@ -12,10 +12,10 @@ from dotenv import load_dotenv
 # langchain imports
 from langchain_google_genai import GoogleGenerativeAI
 
-gemini.configure(api_key=' ')
+gemini.configure( api_key='AIzaSyDP20o8c9aoNlns4w49TywukOhXRUNHnxE')
 
 # api Key
-api_key=' '
+ api_key='AIzaSyDP20o8c9aoNlns4w49TywukOhXRUNHnxE'
 
 # declare console
 console = Console()

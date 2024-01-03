@@ -8,6 +8,9 @@ from OrchestratorSupport import OrcSupport
 from rich.console import Console
 import datetime
 import json
+from telemetry.SystemInfo import get_system_info
+from Bus.functions import *
+
 
 # console
 console = Console()
@@ -36,9 +39,10 @@ class OrchestrationUnit:
         self.idle_timer = None # this timer will keep waiting 
         self.visual_inputs = None # this will hold the visual data from the vision inputs of the system.
         self.audio_inputs = None # this will hold the audio data from the audio inputs of the system.
-        self.system_diagnosis = None # this will hold the diagnosis of the system.
+        self.system_diagnosis = get_system_info() # this will hold the diagnosis of the system.
         self.keyboards_inputs = None # this will hold the keyboard inputs of the system.
-        self.thoughts = 'System is free, continue exploring the world as you wish by thinking and learning as you wait for the next interaction' # this is going to be a string that represents the thoughts of the system.
+        self.thoughts = '' # this is going to be a string that represents the thoughts of the system.
+        self.SystemOperations = None # 'This is going to be a string that represents the operations of each layer of the system.'
         
         self.selfAwareness = None
 
@@ -84,9 +88,11 @@ class OrchestrationUnit:
         pass
 
     def extract_messages(self, layer_msgs):
+        print('layer_msgs: ', layer_msgs, type(layer_msgs))
+        
         try:
             # convert msg to dict 
-            msg = json.loads(layer_msgs['message'])
+            msg = json.loads(layer_msgs)
             south = msg['SOUTH']
             north = msg['NORTH']
 
@@ -132,110 +138,171 @@ class OrchestrationUnit:
         # console.log('thoughts: ', self.thoughts)
 
 
-    def initiateThought(self):
 
-        prompt = self._build_prompt()        
-        console.log(prompt)
+    def process_layer(self, layer, prompt):
+        # Call the layer and get the response
+        response = self._call_layer(layer, prompt)
+       
+        status = response['status']
 
-        # clear the user input and speech to text. after processing.                
-        # let's call the aspirational layer.
-        layer_one_response = self._call_layer(self.layer1, self._build_prompt())
-        # console.log(layer_one_response)
+        if status == 200:
+            # get the keys from the response
+            keys = response.keys()
+            
+            # if we have the layer and message keys in the response, we are going to extract the message and layer name.
+            if 'Layer' in keys and 'message' in keys:
+                message = response['message']
+                layer_name = response['Layer']
 
-        console.log(type(layer_one_response), layer_one_response)
+                try:
+                    # send the message to extract the messages from the layer.
+                    messages = self.extract_messages(message)
+                    console.log(messages, type(messages))
+
+                    # if we have the south and north keys in the messages, we are going to extract the messages.
+                    if 'SOUTH' in messages.keys() and 'NORTH' in messages.keys():
+                        south = messages['SOUTH']
+                        north = messages['NORTH']
+
+                        # we are going to post the south and north messages to the bus.
+                        post_data_to_bus('north_bound_bus', {
+                            'layer': layer_name, 
+                            'message': fr'{north}',
+                            'system_prompt': prompt
+                        })
+
+                        store = create_and_fetch_recent('South_bound_bus', {
+                            'layer': layer_name, 
+                            'message': fr'{south}',
+                            'system_prompt': prompt
+                            })
+                        return store
+
+
+                    # we have the 
+                except Exception as e:
+                    console.log(fr'Error: {e}')
+                    # console.log(fr'Response Type: {type(response)}\n Response: {response}, Keys: {keys}')
+
+        else:
+            return []
         
-        if layer_one_response['message']:
-            # in a thread we are going to call the _build_thoughts function.
-            threading.Thread(target=self._build_thoughts, args=(layer_one_response['message'],)).start()
+         # Extract the message, layer, and status from the response
+        message = response['message']
+        layer_name = response['Layer']
 
-            # we are goingt o call later 2.
-            layer_two_response = self._call_layer(self.layer2, layer_one_response['message'])
-            console.log(type(layer_two_response) ,layer_two_response)
+        
+        
+        # Post to the south bound bus and fetch the most recent records
+        store = create_and_fetch_recent('South_bound_bus', {
+            'layer': layer_name,
+            'message': message,
+            'system_prompt': prompt
+        })
 
-            # input('Enter to continue')
-            if (layer_two_response['message']):
-                msgs = self.extract_messages(layer_two_response)
+        # print(store)
+        # console.log(message, layer_name, status)
 
-                # in a thread we are going to call the _build_thoughts function.
-                threading.Thread(target=self._build_thoughts, args=(layer_one_response['message'],)).start()
+        # Return the store
+        return store
 
-                # call layer 3.
-                layer_three_response = self._call_layer(self.layer3, fr"{prompt} \n\n {msgs['NORTH']}")
-                console.log(layer_three_response)
+    
 
-                if (layer_three_response['message']):
-                    msgs = self.extract_messages(layer_three_response)
-                    # in a thread we are going to call the _build_thoughts function.
-                    threading.Thread(target=self._build_thoughts, args=(layer_one_response['message'],)).start()
+    def trim_to_20k_tokens(self, input_string):
+        # Split the input string into tokens
+        tokens = input_string.split()
 
-                    # call layer 4.
-                    layer_four_response = self._call_layer(self.layer4, fr"{prompt} \n\n {msgs['NORTH']}")
-                    console.log(layer_four_response)
+        # If there are more than 20,000 tokens, trim the list
+        if len(tokens) > 20000:
+            tokens = tokens[:20000]
 
-                    if (layer_four_response['message']):
-                        # msgs = self.extract_messages(layer_four_response)
-                        # in a thread we are going to call the _build_thoughts function.
-                        threading.Thread(target=self._build_thoughts, args=(layer_one_response['message'],)).start()
+        # Join the tokens back into a string and return it
+        return ' '.join(tokens)
 
-                        # call layer 5.
-                        layer_five_response = self._call_layer(self.layer5, fr"{prompt} \n\n Strictly Focus on the North Bound Messages: {layer_one_response['message']}")
-                        console.log(layer_five_response)
 
-                        # we are going to call the final layer.
-                        if (layer_five_response['message']):
-                            msgs = self.extract_messages(layer_five_response)
+    def initiateThought(self):
+        while True:
+            # Define the layers
+            layers = [self.layer1, self.layer2, self.layer3, self.layer4, self.layer5, self.layer6]
 
-                            # in a thread we are going to call the _build_thoughts function.
-                            threading.Thread(target=self._build_thoughts, args=(layer_one_response['message'],)).start()
+            # Iterate over the layers
+            for layer in layers:
+                print('layer: ', layer)
 
-                            layer_six_response = self._call_layer(self.layer6, fr"{prompt} \n\n {msgs['NORTH']}")
-                            console.log(layer_six_response)
+                prompt = self._build_prompt()
+                prompt = self.trim_to_20k_tokens(prompt)
 
-                            # this layer is going to retriggr the whole process by recalling the initiateThought function.
-                            if (layer_six_response['message']):
-                                # clear the keyboard inputs.
-                                self.keyboards_inputs = None
-                                # clear the audio inputs.
-                                self.audio_inputs = None
+                # get the north bound messages from the bus.
+                north_bound_messages = get_data_from_bus('north_bound_bus', 6)
+                # pass these messages to only the first layer.
+                if layer == self.layer1:
+                    # add the north bound messages at the beginning of the prompt.
+                    prompt = fr'{north_bound_messages}\n{prompt}'
+                    console.log('Modified Prompt: ', prompt)
 
-                                self.initiateThought()
+                # Process the layer
+                store = self.process_layer(layer, prompt)
+
+                # Extract the data and create a "Layer:>message" string separated by a newline
+
+                information = '\n'.join([f"{record[1]}:> {record[2]}" for record in store if isinstance(record, list) and len(record) > 2])
+
+                # Trim the information to 20k tokens
+                information = self.trim_to_20k_tokens(information)
+
+                # console.log('information: ', information)
+
+                # Build the thoughts string
+                self._build_thoughts(fr' This is the current bus system data from different layers\n{information}')
+
+                # Set the system operations to this information
+                self.SystemOperations = information 
+
+                # Update the prompt for the next layer
+                prompt = self._build_prompt()
+                prompt = self.trim_to_20k_tokens(prompt)
+                
+            # print('prompt: ', prompt, '\n Information:', information, '\nThoughts :', self.thoughts, '\n System Operations:', self.SystemOperations)
+            # input('press enter to continue...')
+
+
 
         
 
     def _build_prompt(self):
         # this function is going to build the prompt ensuring to include all the relevant data for the system to process.
         SystemPrompt = fr"""
-        Time: {datetime.datetime.now()}
-        Time is always of the atutmost importance so consider it always.
+            Time: {datetime.datetime.now()}
+            Time is always of the atutmost importance so consider it always.
 
-        # information.
-        The Following information has been collection from your different telemetry sources.
+            # information.
+            The Following information has been collection from your different telemetry sources.
 
-        #current internal thoughts.
-        {self.thoughts}
+            #current internal thoughts.
+            {self.thoughts}
 
-        # visual inputs (relates to the environment) about you.
-        {self.visual_inputs}
+            # visual inputs (relates to the environment) about you.
+            {self.visual_inputs}
 
-        # audio inputs. (This isnformation is coming from the audio inputs of the system and MUST indicate the type of audio input. [USER_REQUEST, SYSTEM_AUDIO_OBSERVATIONS])
-        {self.audio_inputs}
+            # audio inputs. (This isnformation is coming from the audio inputs of the system and MUST indicate the type of audio input. [USER_REQUEST, SYSTEM_AUDIO_OBSERVATIONS])
+            {self.audio_inputs}
 
-        # keyboard inputs. (This information is coming from the keyboard inputs of the system and MUST indicate the type of keyboard input. [USER_REQUEST,  SYSTEM_KEYBOARD_OBSERVATIONS])
-        {self.keyboards_inputs}
+            # keyboard inputs. (This information is coming from the keyboard inputs of the system and MUST indicate the type of keyboard input. [USER_REQUEST,  SYSTEM_KEYBOARD_OBSERVATIONS])
+            Received Input: {self.keyboards_inputs}
 
-        # system diagnosis. (The computer stats and diagnosis of the system you are running on)
-        {self.system_diagnosis}
+            
+            # System Layers Operations
+            {self.SystemOperations}
 
-        # Internal Self Awarness
-        {self.selfAwareness}
+            # system diagnosis. (The computer stats and diagnosis of the system you are running on, Use this to your advantage.)
+            {self.system_diagnosis}
 
-
-        #system configuration.
-        This is your current system configuration. by which you run. Refer to this for personal adjustments.
-        {self.system_configuration}
+            # Internal Self Awarness
+            {self.selfAwareness}
 
         """
         
+        # return the System Prompt.
         return SystemPrompt    
 
     def _ExternalUserRquest(self):
@@ -263,7 +330,12 @@ class OrchestrationUnit:
     def _audio_receiver(self, stt):
         self.audio_inputs = stt
 
-        console.log('received audio input and awaiting command for execution....')
+        # we are going to call the initiateThought function here.
+        threading.Thread(target=self.initiateThought).start()
+
+        return 'received audio input and sent for processing....'
+
+        
         
 
     def _visual_receiver(self, vtt):
@@ -273,9 +345,10 @@ class OrchestrationUnit:
     def _keyboard_receiver(self, user_input):
         self.keyboards_inputs = user_input
 
-        console.log('waiting for 3 seconds...')
-        # this input will call the initiateThought function.
-        self.initiateThought()
+        # we are going to call the initiateThought function here.
+        threading.Thread(target=self.initiateThought).start()
+
+        return 'received keyboard input and sent for processing....'
         
         
 

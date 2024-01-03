@@ -17,7 +17,7 @@ load_dotenv()
 # gemini api key
 gemini_key = os.getenv('google_gemini_api_key')
 
-gemini.configure(api_key=' ')
+gemini.configure( api_key='AIzaSyDP20o8c9aoNlns4w49TywukOhXRUNHnxE')
 
 class GeminiSupport:
     def __init__(self, constitution):

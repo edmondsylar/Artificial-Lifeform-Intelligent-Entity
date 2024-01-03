@@ -17,7 +17,7 @@ load_dotenv()
 # gemini api key
 gemini_key = os.getenv('google_gemini_api_key')
 
-gemini.configure(api_key=' ')
+gemini.configure( api_key='AIzaSyBBRY0s8BuUVUPYLVOfEOdJ5ykOprg8mus')
 
 class GeminiSupport:
     def __init__(self, constitution):
@@ -63,8 +63,6 @@ class GeminiSupport:
         You are issued the constitution below:
         
         {self.constitution}
-
-        This is checking the online api status, if you are active just respond with strictly "active" otherwise respond with "inactive"
         '''
 
         # startup the layer by sending the constitution.

@@ -17,7 +17,7 @@ load_dotenv()
 gemini_key = os.getenv('google_gemini_api_key')
 
 # configure gemini
-gemini.configure(api_key=' ')
+gemini.configure( api_key='AIzaSyDP20o8c9aoNlns4w49TywukOhXRUNHnxE')
 
 # we are going to use the geminin vision model
 

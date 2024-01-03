@@ -17,7 +17,7 @@ load_dotenv()
 # gemini api key
 gemini_key = os.getenv('google_gemini_api_key')
 
-gemini.configure(api_key=' ')
+gemini.configure( api_key='AIzaSyDP20o8c9aoNlns4w49TywukOhXRUNHnxE')
 
 class GeminiSupport:
     def __init__(self, constitution):
@@ -111,7 +111,7 @@ TaskProsecutionInstruction = """
     3. Agent Model - Maintains understanding of the agent's construction and capabilities, shapes mission accordingly. 
     4. Executive Function - Resources, Risks, Planning, etc
     5. Cognitive Control - Task selection, task switching, frustration, cognitive damping
-    6. Task Prosecution - This is you. Task failures and success, interaction with APIs in and out of the outside world
+    6. Task Prosecution - This is you. Task failures and success, interaction with APIs in and out of the outside world.
 
     ## BUSES
 
